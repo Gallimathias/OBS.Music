@@ -58,7 +58,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web\RequestTemplate.html" />
+    <EmbeddedResource Include="Web\RequestTemplate.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\jquery-3.2.1.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\main.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

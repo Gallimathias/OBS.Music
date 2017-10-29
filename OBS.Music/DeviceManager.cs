@@ -25,7 +25,7 @@ namespace OBS.Music
             var tmpDictionary = new Dictionary<int, MMDevice>();
 
             for (int i = 0; i < collection.Count; i++)
-                tmpDictionary.Add(i + 1, collection[i]);
+                tmpDictionary.Add(i, collection[i]);
 
             return tmpDictionary;
         }

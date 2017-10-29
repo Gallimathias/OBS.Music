@@ -2,6 +2,7 @@
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,10 @@ namespace OBS.Music
             get => playList; set
             {
                 playList = value;
+
+                if (value == null)
+                    return;
+                                
                 SetMinMax(playList);
                 if (playList.Count > 0)
                     PlayListIndex = playList.FirstOrDefault().Key;
@@ -25,6 +30,14 @@ namespace OBS.Music
         public int MaxPlayListNumber { get; private set; }
         public int MinPlayListNumber { get; private set; }
         public KeyValuePair<int, MMDevice> Device { get; set; }
+        public string RootPath { get; set; }
+        public bool IsPalying => waveOutEvent != null ? waveOutEvent.PlaybackState == PlaybackState.Playing : false;
+
+        public string CurrentName => PlayList.Count > 0 ? PlayList[PlayListIndex].Name : "";
+        public string CurrentSource => PlayList.Count > 0 ? PlayList[PlayListIndex].Source : "";
+        public string CurrentLicence => PlayList.Count > 0 ? PlayList[PlayListIndex].Licence : "";
+
+        public event EventHandler<StoppedEventArgs> OnMusicIsStopped;
 
         private WaveOutEvent waveOutEvent;
         private Mp3FileReader mp3;
@@ -37,22 +50,38 @@ namespace OBS.Music
             waveOutEvent = new WaveOutEvent();
             PlayList = new PlayList();
             playListIndex = 1;
+            RootPath = @".\";
         }
 
         public void SetPlayList(PlayList playList) => PlayList = playList;
 
         public void SelectFile(int value)
         {
-            if (PlayList.Count < 1)
+            if (PlayList == null || PlayList?.Count < 1)
                 return;
 
             playListIndex = GetPlayListNumber(value);
-            mp3 = new Mp3FileReader(PlayList[playListIndex].File);
+            var filePath = PlayList[playListIndex].File;
 
-            waveOutEvent = new WaveOutEvent();
-            waveOutEvent.Init(mp3);
-            waveOutEvent.DeviceNumber = Device.Key;
+            if (!File.Exists(filePath))
+                filePath = Path.Combine(RootPath, PlayList[playListIndex].File);
+
+            if(waveOutEvent?.PlaybackState != PlaybackState.Stopped)
+            {
+                waveOutEvent?.Stop();
+                mp3?.Dispose();
+                waveOutEvent?.Dispose();
+            }
+
+            mp3 = new Mp3FileReader(filePath);
+
+            waveOutEvent = new WaveOutEvent
+            {
+                DeviceNumber = Device.Key
+            };
+            waveOutEvent.Init(mp3);            
             waveOutEvent.PlaybackStopped += WaveOutEvent_PlaybackStopped;
+            waveOutEvent.PlaybackStopped += (s, e) => OnMusicIsStopped?.Invoke(s, e);
         }
 
         public void Dispose()
@@ -89,7 +118,7 @@ namespace OBS.Music
 
         private void WaveOutEvent_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-           
+
             mp3?.Dispose();
 
             PlayListIndex++;
@@ -105,7 +134,7 @@ namespace OBS.Music
 
         private void SetMinMax(PlayList list)
         {
-            if (list.Count < 1)
+            if (list == null || list?.Count < 1)
                 return;
 
             MinPlayListNumber = list.Min(m => m.Key);
