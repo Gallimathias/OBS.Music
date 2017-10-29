@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -31,6 +32,7 @@ namespace OBS.Music.GUI
         }
 
         private Player player;
+        private HttpService httpService;
 
         public Dashboard()
         {
@@ -41,16 +43,60 @@ namespace OBS.Music.GUI
                 Loop = true
             };
 
+
+
+            httpService = new HttpService("http://*:10957/", player);
+
             foreach (var device in DeviceManager.Devices)
                 OutputComboBox.Items.Add(new ComboBoxItem(device.Value, device.Key));
 
             OutputComboBox.SelectedIndexChanged += OutputComboBox_SelectedIndexChanged;
+            player.OnMusicIsStopped += Player_OnMusicIsStopped;
+            PlayListBox.SelectedIndexChanged += PlayListBox_SelectedIndexChanged;
+
+            LoadFile();
+            httpService.Start();
+        }
+
+
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            SaveFile();
+
+            httpService?.Stop();
+            player?.Stop();
+            player?.Dispose();
+            base.OnClosing(e);
+        }
+
+        private void Player_OnMusicIsStopped(object sender, NAudio.Wave.StoppedEventArgs e)
+        {
+            PlayListBox.SelectedIndex = player.PlayListIndex - 1;
+        }
+
+        private void PlayListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (PlayListBox.SelectedIndex + 1 == player.PlayListIndex)
+                return;
+
+            var playing = player.IsPalying;
+
+            if (playing)
+                player.Stop();
+
+            player.PlayListIndex = PlayListBox.SelectedIndex + 1;
+
+            if (playing)
+                player.Play();
         }
 
         private void OutputComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var item = (ComboBoxItem)OutputComboBox.SelectedItem;
+            
             player.Device = new KeyValuePair<int, MMDevice>(item.Index, item.Device);
+            player.PlayListIndex = player.PlayListIndex;
         }
 
         private void DirectoryAssistButton_Click(object sender, EventArgs e)
@@ -64,8 +110,10 @@ namespace OBS.Music.GUI
 
         private void DirectoryBox_TextChanged(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(DirectoryBox.Text))
+            if (string.IsNullOrWhiteSpace(DirectoryBox.Text))
                 DirectoryBox.Text = @".\";
+
+            player.RootPath = DirectoryBox.Text;
 
             var collector = new Collector(DirectoryBox.Text);
 
@@ -83,6 +131,9 @@ namespace OBS.Music.GUI
 
             Task.Run(() =>
             {
+                while (!PlayListBox.IsHandleCreated)
+                    Thread.Sleep(1);
+
                 foreach (var item in player.PlayList.ToList())
                 {
                     PlayListBox.Invoke(new MethodInvoker(() =>
@@ -91,7 +142,8 @@ namespace OBS.Music.GUI
                     }));
                 }
 
-                PlayListBox.Invoke(new MethodInvoker(() => {
+                PlayListBox.Invoke(new MethodInvoker(() =>
+                {
                     PlayListBox.SelectedItem = PlayListBox.Items[0];
                 }));
             });
@@ -120,6 +172,41 @@ namespace OBS.Music.GUI
 
             File.AppendAllText(file.FullName, raw);
 
+        }
+
+        private void SaveFile()
+        {
+            var list = new Dictionary<string, string>()
+            {
+                ["Path"] = DirectoryBox.Text,
+                ["OutputDevice"] = OutputComboBox.SelectedIndex.ToString()
+            };
+
+            var file = new FileInfo(@".\main.opt");
+
+            if (file.Exists)
+                file.Delete();
+
+            File.AppendAllText(file.FullName, JsonConvert.SerializeObject(list, Formatting.Indented));
+        }
+
+        private void LoadFile()
+        {
+            var file = new FileInfo(@".\main.opt");
+
+            if (!file.Exists)
+                return;
+
+            var list = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file.FullName));
+
+            DirectoryBox.Text = list["Path"];
+            OutputComboBox.SelectedIndex = int.Parse(list["OutputDevice"]);
+            player.PlayListIndex = player.PlayListIndex;
+        }
+
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -48,6 +48,7 @@
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createNewSourceFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.ListPanel.SuspendLayout();
@@ -210,9 +211,9 @@
             // MainStatusStrip
             // 
             this.MainStatusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.MainStatusStrip.Location = new System.Drawing.Point(0, 702);
+            this.MainStatusStrip.Location = new System.Drawing.Point(0, 704);
             this.MainStatusStrip.Name = "MainStatusStrip";
-            this.MainStatusStrip.Size = new System.Drawing.Size(708, 24);
+            this.MainStatusStrip.Size = new System.Drawing.Size(708, 22);
             this.MainStatusStrip.TabIndex = 1;
             this.MainStatusStrip.Text = "MainStatusStrip";
             // 
@@ -230,6 +231,8 @@
             // 
             // mainToolStripMenuItem
             // 
+            this.mainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeToolStripMenuItem});
             this.mainToolStripMenuItem.Name = "mainToolStripMenuItem";
             this.mainToolStripMenuItem.Size = new System.Drawing.Size(54, 24);
             this.mainToolStripMenuItem.Text = "Main";
@@ -249,6 +252,13 @@
             this.createNewSourceFileToolStripMenuItem.Text = "Create New SourceFile";
             this.createNewSourceFileToolStripMenuItem.Click += new System.EventHandler(this.CreateNewSourceFileToolStripMenuItem_Click);
             // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -257,7 +267,6 @@
             this.Controls.Add(this.MainStatusStrip);
             this.Controls.Add(this.MainMenuStrip);
             this.Controls.Add(this.MainPanel);
-            this.MainMenuStrip = this.MainMenuStrip;
             this.MinimumSize = new System.Drawing.Size(726, 773);
             this.Name = "Dashboard";
             this.Text = "Dashboard";
@@ -298,6 +307,7 @@
         private System.Windows.Forms.ToolStripMenuItem mainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem musicToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createNewSourceFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
     }
 }
 
