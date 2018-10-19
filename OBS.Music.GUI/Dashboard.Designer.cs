@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
             this.MainPanel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.OutputComboBox = new System.Windows.Forms.ComboBox();
@@ -46,9 +47,9 @@
             this.MainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.MainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createNewSourceFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.ListPanel.SuspendLayout();
@@ -237,6 +238,13 @@
             this.mainToolStripMenuItem.Size = new System.Drawing.Size(54, 24);
             this.mainToolStripMenuItem.Text = "Main";
             // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
+            // 
             // musicToolStripMenuItem
             // 
             this.musicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -252,13 +260,6 @@
             this.createNewSourceFileToolStripMenuItem.Text = "Create New SourceFile";
             this.createNewSourceFileToolStripMenuItem.Click += new System.EventHandler(this.CreateNewSourceFileToolStripMenuItem_Click);
             // 
-            // closeToolStripMenuItem
-            // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
-            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -267,6 +268,7 @@
             this.Controls.Add(this.MainStatusStrip);
             this.Controls.Add(this.MainMenuStrip);
             this.Controls.Add(this.MainPanel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(726, 773);
             this.Name = "Dashboard";
             this.Text = "Dashboard";

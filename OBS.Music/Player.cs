@@ -66,6 +66,12 @@ namespace OBS.Music
             if (!File.Exists(filePath))
                 filePath = Path.Combine(RootPath, PlayList[playListIndex].File);
 
+            if(!File.Exists(filePath))
+            {
+                SelectFile(value + 1);
+                return;
+            }
+
             if(waveOutEvent?.PlaybackState != PlaybackState.Stopped)
             {
                 waveOutEvent?.Stop();

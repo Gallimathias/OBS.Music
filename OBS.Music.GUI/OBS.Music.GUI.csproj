@@ -31,9 +31,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>rodentia_icons_emblem_music_GPr_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NAudio, Version=1.8.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -95,6 +99,9 @@
       <Project>{1b4097f4-542f-4199-afc2-4b44e19dbc19}</Project>
       <Name>OBS.Music</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="rodentia_icons_emblem_music_GPr_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
