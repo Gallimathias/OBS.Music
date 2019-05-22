@@ -29,9 +29,9 @@ namespace OBS.Music
         public int PlayListIndex { get => playListIndex; set => SelectFile(value); }
         public int MaxPlayListNumber { get; private set; }
         public int MinPlayListNumber { get; private set; }
-        public KeyValuePair<int, MMDevice> Device { get; set; }
+        public MMDevice Device { get; set; }
         public string RootPath { get; set; }
-        public bool IsPalying => waveOutEvent != null ? waveOutEvent.PlaybackState == PlaybackState.Playing : false;
+        public bool IsPalying => directSoundOut != null ? directSoundOut.PlaybackState == PlaybackState.Playing : false;
 
         public string CurrentName => PlayList.Count > 0 ? PlayList[PlayListIndex].Name : "";
         public string CurrentSource => PlayList.Count > 0 ? PlayList[PlayListIndex].Source : "";
@@ -39,7 +39,7 @@ namespace OBS.Music
 
         public event EventHandler<StoppedEventArgs> OnMusicIsStopped;
 
-        private WaveOutEvent waveOutEvent;
+        private DirectSoundOut directSoundOut;
         private Mp3FileReader mp3;
         private int playListIndex;
         private PlayList playList;
@@ -47,7 +47,7 @@ namespace OBS.Music
 
         public Player()
         {
-            waveOutEvent = new WaveOutEvent();
+            directSoundOut = new DirectSoundOut();
             PlayList = new PlayList();
             playListIndex = 1;
             RootPath = @".\";
@@ -58,7 +58,7 @@ namespace OBS.Music
 
         public void SelectFile(int value)
         {
-            if (PlayList == null || PlayList?.Count < 1)
+            if (PlayList == null || PlayList?.Count < 1 || Device == null)
                 return;
 
             playListIndex = GetPlayListNumber(value);
@@ -73,42 +73,40 @@ namespace OBS.Music
                 return;
             }
 
-            if (waveOutEvent?.PlaybackState != PlaybackState.Stopped)
+            if (directSoundOut?.PlaybackState != PlaybackState.Stopped)
             {
-                waveOutEvent?.Stop();
+                directSoundOut?.Stop();
                 mp3?.Dispose();
-                waveOutEvent?.Dispose();
+                directSoundOut?.Dispose();
             }
 
             mp3 = new Mp3FileReader(filePath);
-
-            waveOutEvent = new WaveOutEvent
+            directSoundOut = new DirectSoundOut(new Guid(Device.ID.Substring(Device.ID.LastIndexOf('.') + 1)))
             {
-                DeviceNumber = Device.Key
             };
-            waveOutEvent.Init(mp3);
-            waveOutEvent.PlaybackStopped += WaveOutEventPlaybackStopped;
-            waveOutEvent.PlaybackStopped += (s, e) => OnMusicIsStopped?.Invoke(s, e);
+            directSoundOut.Init(mp3);
+            directSoundOut.PlaybackStopped += WaveOutEventPlaybackStopped;
+            directSoundOut.PlaybackStopped += (s, e) => OnMusicIsStopped?.Invoke(s, e);
         }
 
         public void Dispose()
         {
-            waveOutEvent?.Dispose();
+            directSoundOut?.Dispose();
             mp3?.Dispose();
             PlayList?.Clear();
 
 
-            waveOutEvent = null;
+            directSoundOut = null;
             mp3 = null;
             PlayList = null;
             playListIndex = 0;
             Loop = false;
-            Device = new KeyValuePair<int, MMDevice>();
+            Device = null;
 
         }
 
         public void Play() 
-            => waveOutEvent.Play();
+            => directSoundOut.Play();
         public void Play(int value)
         {
             SelectFile(value);
@@ -116,12 +114,12 @@ namespace OBS.Music
         }
 
         public void Pause()
-           => waveOutEvent.Pause();
+           => directSoundOut.Pause();
 
         public void Stop()
         {
             stopClicked = true;
-            waveOutEvent.Stop();
+            directSoundOut.Stop();
         }
 
         private void WaveOutEventPlaybackStopped(object sender, StoppedEventArgs e)
