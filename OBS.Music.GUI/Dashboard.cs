@@ -31,7 +31,7 @@ namespace OBS.Music.GUI
 
             httpService = new HttpService("http://*:10957/", player);
 
-            foreach (KeyValuePair<int, MMDevice> device in DeviceManager.Devices)
+            foreach (KeyValuePair<string, MMDevice> device in DeviceManager.Devices)
                 OutputComboBox.Items.Add(new ComboBoxItem(device.Value, device.Key));
 
             OutputComboBox.SelectedIndexChanged += OutputComboBoxSelectedIndexChanged;
@@ -76,7 +76,7 @@ namespace OBS.Music.GUI
         {
             var item = (ComboBoxItem)OutputComboBox.SelectedItem;
 
-            player.Device = new KeyValuePair<int, MMDevice>(item.Index, item.Device);
+            player.Device = item.Device;
             player.PlayListIndex = player.PlayListIndex;
         }
 
@@ -154,7 +154,7 @@ namespace OBS.Music.GUI
             var list = new Dictionary<string, string>()
             {
                 ["Path"] = DirectoryBox.Text,
-                ["OutputDevice"] = OutputComboBox.SelectedIndex.ToString()
+                ["OutputDevice"] = ((ComboBoxItem)OutputComboBox.SelectedItem).ID
             };
 
             var file = new FileInfo(@".\main.opt");
@@ -175,7 +175,8 @@ namespace OBS.Music.GUI
             Dictionary<string, string> list = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file.FullName));
 
             DirectoryBox.Text = list["Path"];
-            OutputComboBox.SelectedIndex = int.Parse(list["OutputDevice"]);
+
+            OutputComboBox.SelectedItem = OutputComboBox.Items.OfType<ComboBoxItem>().FirstOrDefault(i => i.ID == list["OutputDevice"]) ?? OutputComboBox.Items[0];
             player.PlayListIndex = player.PlayListIndex;
         }
 
@@ -185,12 +186,12 @@ namespace OBS.Music.GUI
         private class ComboBoxItem
         {
             public MMDevice Device { get; private set; }
-            public int Index { get; private set; }
+            public string ID { get; private set; }
 
-            public ComboBoxItem(MMDevice device, int index)
+            public ComboBoxItem(MMDevice device, string index)
             {
                 Device = device;
-                Index = index;
+                ID = index;
             }
 
             public override string ToString() 
