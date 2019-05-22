@@ -19,7 +19,7 @@ namespace OBS.Music
 
                 if (value == null)
                     return;
-                                
+
                 SetMinMax(playList);
                 if (playList.Count > 0)
                     PlayListIndex = playList.FirstOrDefault().Key;
@@ -53,7 +53,8 @@ namespace OBS.Music
             RootPath = @".\";
         }
 
-        public void SetPlayList(PlayList playList) => PlayList = playList;
+        public void SetPlayList(PlayList playList) 
+            => PlayList = playList;
 
         public void SelectFile(int value)
         {
@@ -66,13 +67,13 @@ namespace OBS.Music
             if (!File.Exists(filePath))
                 filePath = Path.Combine(RootPath, PlayList[playListIndex].File);
 
-            if(!File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
                 SelectFile(value + 1);
                 return;
             }
 
-            if(waveOutEvent?.PlaybackState != PlaybackState.Stopped)
+            if (waveOutEvent?.PlaybackState != PlaybackState.Stopped)
             {
                 waveOutEvent?.Stop();
                 mp3?.Dispose();
@@ -85,8 +86,8 @@ namespace OBS.Music
             {
                 DeviceNumber = Device.Key
             };
-            waveOutEvent.Init(mp3);            
-            waveOutEvent.PlaybackStopped += WaveOutEvent_PlaybackStopped;
+            waveOutEvent.Init(mp3);
+            waveOutEvent.PlaybackStopped += WaveOutEventPlaybackStopped;
             waveOutEvent.PlaybackStopped += (s, e) => OnMusicIsStopped?.Invoke(s, e);
         }
 
@@ -106,7 +107,8 @@ namespace OBS.Music
 
         }
 
-        public void Play() => waveOutEvent.Play();
+        public void Play() 
+            => waveOutEvent.Play();
         public void Play(int value)
         {
             SelectFile(value);
@@ -122,7 +124,7 @@ namespace OBS.Music
             waveOutEvent.Stop();
         }
 
-        private void WaveOutEvent_PlaybackStopped(object sender, StoppedEventArgs e)
+        private void WaveOutEventPlaybackStopped(object sender, StoppedEventArgs e)
         {
 
             mp3?.Dispose();

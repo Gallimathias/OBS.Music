@@ -9,20 +9,18 @@ namespace OBS.Music
 {
     public class PlayList : Dictionary<int, MusicSourceInfo>
     {
-        private Random random;
+        private readonly Random random;
 
-        public PlayList()
-        {
-            random = new Random();
-        }
+        public PlayList() 
+            => random = new Random();
 
         public void Randomize()
         {
             var list = new List<MusicSourceInfo>();
             int i;
 
-            list.AddRange(Values.ToArray());            
-            
+            list.AddRange(Values.ToArray());
+
             Clear();
 
             while (list.Count != 0)

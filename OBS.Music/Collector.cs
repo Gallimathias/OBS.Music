@@ -26,9 +26,9 @@ namespace OBS.Music
             if (!DirectoryInfo.Exists)
                 return;
 
-            var msifFiles = DirectoryInfo.GetFiles("*.msif");
-            
-            foreach (var file in msifFiles)
+            FileInfo[] msifFiles = DirectoryInfo.GetFiles("*.msif");
+
+            foreach (FileInfo file in msifFiles)
                 MusicInfo.AddRange(JsonConvert.DeserializeObject<MusicSourceInfo[]>(File.ReadAllText(file.FullName)));
 
         }
@@ -37,7 +37,7 @@ namespace OBS.Music
         {
             var playList = new PlayList();
 
-            for (int i = 0; i < MusicInfo.Count; i++)
+            for (var i = 0; i < MusicInfo.Count; i++)
                 playList.Add(i, MusicInfo[i]);
 
             return playList;

@@ -13,7 +13,7 @@ namespace OBS.Music
     {
         public Player Player { get; set; }
 
-        private HttpListener httpListener;
+        private readonly HttpListener httpListener;
 
         private PropertyInfo[] TargetPropertys => typeof(Player).GetProperties();
 
@@ -25,10 +25,8 @@ namespace OBS.Music
             SetPrefix(prefix);
         }
 
-        public void SetPrefix(string prefix)
-        {
-            httpListener.Prefixes.Add(prefix);
-        }
+        public void SetPrefix(string prefix) 
+            => httpListener.Prefixes.Add(prefix);
 
         public void Start()
         {
@@ -36,7 +34,8 @@ namespace OBS.Music
             httpListener.BeginGetContext(GetRequest, null);
         }
 
-        public void Stop() => httpListener.Stop();
+        public void Stop() 
+            => httpListener.Stop();
 
         private void GetRequest(IAsyncResult ar)
         {
@@ -56,7 +55,7 @@ namespace OBS.Music
                 return;
 
             var request = $"Current{result.Request.RawUrl.Trim('/')}";
-            string responseValue = "";
+            var responseValue = "";
 
             if (request == "Current")
             {
@@ -85,7 +84,7 @@ namespace OBS.Music
             else
             {
 
-                var prop = TargetPropertys.FirstOrDefault(p => p.Name == request);
+                PropertyInfo prop = TargetPropertys.FirstOrDefault(p => p.Name == request);
 
                 if (prop == null)
                 {

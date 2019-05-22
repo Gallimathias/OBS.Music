@@ -16,23 +16,9 @@ using System.Windows.Forms;
 namespace OBS.Music.GUI
 {
     public partial class Dashboard : Form
-    {
-        class ComboBoxItem
-        {
-            public MMDevice Device { get; private set; }
-            public int Index { get; private set; }
-
-            public ComboBoxItem(MMDevice device, int index)
-            {
-                Device = device;
-                Index = index;
-            }
-
-            public override string ToString() => Device.FriendlyName;
-        }
-
-        private Player player;
-        private HttpService httpService;
+    {       
+        private readonly Player player;
+        private readonly HttpService httpService;
 
         public Dashboard()
         {
@@ -43,21 +29,18 @@ namespace OBS.Music.GUI
                 Loop = true
             };
 
-
-
             httpService = new HttpService("http://*:10957/", player);
 
-            foreach (var device in DeviceManager.Devices)
+            foreach (KeyValuePair<int, MMDevice> device in DeviceManager.Devices)
                 OutputComboBox.Items.Add(new ComboBoxItem(device.Value, device.Key));
 
-            OutputComboBox.SelectedIndexChanged += OutputComboBox_SelectedIndexChanged;
-            player.OnMusicIsStopped += Player_OnMusicIsStopped;
-            PlayListBox.SelectedIndexChanged += PlayListBox_SelectedIndexChanged;
+            OutputComboBox.SelectedIndexChanged += OutputComboBoxSelectedIndexChanged;
+            player.OnMusicIsStopped += PlayerOnMusicIsStopped;
+            PlayListBox.SelectedIndexChanged += PlayListBoxSelectedIndexChanged;
 
             LoadFile();
             httpService.Start();
         }
-
 
 
         protected override void OnClosing(CancelEventArgs e)
@@ -70,12 +53,10 @@ namespace OBS.Music.GUI
             base.OnClosing(e);
         }
 
-        private void Player_OnMusicIsStopped(object sender, NAudio.Wave.StoppedEventArgs e)
-        {
-            PlayListBox.SelectedIndex = player.PlayListIndex - 1;
-        }
+        private void PlayerOnMusicIsStopped(object sender, NAudio.Wave.StoppedEventArgs e) 
+            => PlayListBox.SelectedIndex = player.PlayListIndex - 1;
 
-        private void PlayListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void PlayListBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             if (PlayListBox.SelectedIndex + 1 == player.PlayListIndex)
                 return;
@@ -91,15 +72,15 @@ namespace OBS.Music.GUI
                 player.Play();
         }
 
-        private void OutputComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void OutputComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             var item = (ComboBoxItem)OutputComboBox.SelectedItem;
-            
+
             player.Device = new KeyValuePair<int, MMDevice>(item.Index, item.Device);
             player.PlayListIndex = player.PlayListIndex;
         }
 
-        private void DirectoryAssistButton_Click(object sender, EventArgs e)
+        private void DirectoryAssistButtonClick(object sender, EventArgs e)
         {
             using (var dialog = new FolderBrowserDialog())
             {
@@ -108,7 +89,7 @@ namespace OBS.Music.GUI
             }
         }
 
-        private void DirectoryBox_TextChanged(object sender, EventArgs e)
+        private void DirectoryBoxTextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(DirectoryBox.Text))
                 DirectoryBox.Text = @".\";
@@ -121,7 +102,7 @@ namespace OBS.Music.GUI
                 return;
 
             collector.Collect();
-            var list = collector.GetPlayList();
+            PlayList list = collector.GetPlayList();
             list.Randomize();
 
             if (list.Count < 1)
@@ -134,7 +115,7 @@ namespace OBS.Music.GUI
                 while (!PlayListBox.IsHandleCreated)
                     Thread.Sleep(1);
 
-                foreach (var item in player.PlayList.ToList())
+                foreach (KeyValuePair<int, MusicSourceInfo> item in player.PlayList.ToList())
                 {
                     PlayListBox.Invoke(new MethodInvoker(() =>
                     {
@@ -149,22 +130,16 @@ namespace OBS.Music.GUI
             });
         }
 
-        private void PlayButton_Click(object sender, EventArgs e)
-        {
-            player.Play();
-        }
+        private void PlayButtonClick(object sender, EventArgs e) 
+            => player.Play();
 
-        private void StopButton_Click(object sender, EventArgs e)
-        {
-            player.Stop();
-        }
+        private void StopButtonClick(object sender, EventArgs e) 
+            => player.Stop();
 
-        private void PauseButton_Click(object sender, EventArgs e)
-        {
-            player.Pause();
-        }
+        private void PauseButtonClick(object sender, EventArgs e) 
+            => player.Pause();
 
-        private void CreateNewSourceFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CreateNewSourceFileToolStripMenuItemClick(object sender, EventArgs e)
         {
             var raw = JsonConvert.SerializeObject(new List<MusicSourceInfo>() { new MusicSourceInfo() }, Formatting.Indented);
 
@@ -197,16 +172,29 @@ namespace OBS.Music.GUI
             if (!file.Exists)
                 return;
 
-            var list = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file.FullName));
+            Dictionary<string, string> list = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file.FullName));
 
             DirectoryBox.Text = list["Path"];
             OutputComboBox.SelectedIndex = int.Parse(list["OutputDevice"]);
             player.PlayListIndex = player.PlayListIndex;
         }
 
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CloseToolStripMenuItemClick(object sender, EventArgs e) 
+            => Close();
+
+        private class ComboBoxItem
         {
-            Close();
+            public MMDevice Device { get; private set; }
+            public int Index { get; private set; }
+
+            public ComboBoxItem(MMDevice device, int index)
+            {
+                Device = device;
+                Index = index;
+            }
+
+            public override string ToString() 
+                => Device.FriendlyName;
         }
     }
 }

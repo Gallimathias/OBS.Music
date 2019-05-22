@@ -149,7 +149,7 @@
             this.DirectoryAssistButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.DirectoryAssistButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.DirectoryAssistButton.UseVisualStyleBackColor = true;
-            this.DirectoryAssistButton.Click += new System.EventHandler(this.DirectoryAssistButton_Click);
+            this.DirectoryAssistButton.Click += new System.EventHandler(this.DirectoryAssistButtonClick);
             // 
             // DirectoryBox
             // 
@@ -157,7 +157,7 @@
             this.DirectoryBox.Name = "DirectoryBox";
             this.DirectoryBox.Size = new System.Drawing.Size(164, 22);
             this.DirectoryBox.TabIndex = 2;
-            this.DirectoryBox.TextChanged += new System.EventHandler(this.DirectoryBox_TextChanged);
+            this.DirectoryBox.TextChanged += new System.EventHandler(this.DirectoryBoxTextChanged);
             // 
             // DirectoryLabel
             // 
@@ -187,7 +187,7 @@
             this.PlayButton.TabIndex = 0;
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = true;
-            this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
+            this.PlayButton.Click += new System.EventHandler(this.PlayButtonClick);
             // 
             // StopButton
             // 
@@ -197,7 +197,7 @@
             this.StopButton.TabIndex = 1;
             this.StopButton.Text = "Stop";
             this.StopButton.UseVisualStyleBackColor = true;
-            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
+            this.StopButton.Click += new System.EventHandler(this.StopButtonClick);
             // 
             // PauseButton
             // 
@@ -207,7 +207,7 @@
             this.PauseButton.TabIndex = 2;
             this.PauseButton.Text = "Pause";
             this.PauseButton.UseVisualStyleBackColor = true;
-            this.PauseButton.Click += new System.EventHandler(this.PauseButton_Click);
+            this.PauseButton.Click += new System.EventHandler(this.PauseButtonClick);
             // 
             // MainStatusStrip
             // 
@@ -243,7 +243,7 @@
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItemClick);
             // 
             // musicToolStripMenuItem
             // 
@@ -258,7 +258,7 @@
             this.createNewSourceFileToolStripMenuItem.Name = "createNewSourceFileToolStripMenuItem";
             this.createNewSourceFileToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
             this.createNewSourceFileToolStripMenuItem.Text = "Create New SourceFile";
-            this.createNewSourceFileToolStripMenuItem.Click += new System.EventHandler(this.CreateNewSourceFileToolStripMenuItem_Click);
+            this.createNewSourceFileToolStripMenuItem.Click += new System.EventHandler(this.CreateNewSourceFileToolStripMenuItemClick);
             // 
             // Dashboard
             // 

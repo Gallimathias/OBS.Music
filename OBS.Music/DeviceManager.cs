@@ -12,19 +12,17 @@ namespace OBS.Music
         public static Dictionary<int, MMDevice> Devices
             => GetDevices();
 
-        private static MMDeviceEnumerator mMDeviceEnumerator;
+        private static readonly MMDeviceEnumerator mMDeviceEnumerator;
 
-        static DeviceManager()
-        {
-            mMDeviceEnumerator = new MMDeviceEnumerator();
-        }
+        static DeviceManager() 
+            => mMDeviceEnumerator = new MMDeviceEnumerator();
 
         private static Dictionary<int, MMDevice> GetDevices()
         {
-            var collection = mMDeviceEnumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+            MMDeviceCollection collection = mMDeviceEnumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
             var tmpDictionary = new Dictionary<int, MMDevice>();
 
-            for (int i = 0; i < collection.Count; i++)
+            for (var i = 0; i < collection.Count; i++)
                 tmpDictionary.Add(i, collection[i]);
 
             return tmpDictionary;
