@@ -9,7 +9,7 @@ namespace OBS.Music
 {
     public static class DeviceManager
     {
-        public static Dictionary<int, MMDevice> Devices
+        public static Dictionary<string, MMDevice> Devices
             => GetDevices();
 
         private static readonly MMDeviceEnumerator mMDeviceEnumerator;
@@ -17,13 +17,15 @@ namespace OBS.Music
         static DeviceManager() 
             => mMDeviceEnumerator = new MMDeviceEnumerator();
 
-        private static Dictionary<int, MMDevice> GetDevices()
+
+        private static Dictionary<string, MMDevice> GetDevices()
         {
             MMDeviceCollection collection = mMDeviceEnumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
-            var tmpDictionary = new Dictionary<int, MMDevice>();
+            var tmpDictionary = new Dictionary<string, MMDevice>();
 
-            for (var i = 0; i < collection.Count; i++)
-                tmpDictionary.Add(i, collection[i]);
+            foreach (var device in collection)
+                tmpDictionary.Add(device.ID, device);
+
 
             return tmpDictionary;
         }
