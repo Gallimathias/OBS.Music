@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:36776",
+      "sslPort": 44354
+    }
+  },
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:7166/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:7166;http://localhost:5166"
+      },
+      "distributionName": ""
+    },
+    "OBS.Music.GUI": {
+      "commandName": "Project",
+      "workingDirectory": "bin\\Debug\\net6.0-windows",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:7166;http://localhost:5166",
+      "dotnetRunMessages": true
+    }
+  }
+}

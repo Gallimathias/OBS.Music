@@ -1,0 +1,76 @@
+﻿<Project Sdk="Microsoft.Build.NoTargets">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Dist>dist</Dist>
+    <Src>src</Src>
+    <PackageManager>yarn</PackageManager>
+    <WebRoot>wwwroot</WebRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="**\*" />
+    <Content Remove="bin\**" />
+    <Content Remove="dist\**" />
+    <Content Remove="node_modules\**" />
+    <Content Remove="obj\**" />
+    <Content Remove="build.hash" />
+    <None Remove="bin\**" />
+    <None Remove="dist\**" />
+    <None Remove="node_modules\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <HashFile Include="build.hash" />
+    <HashTmpFile Include="temp.build.hash" />
+    <WatchedFiles Include="$(Src)\**\*.*;*.json" />
+    <DistFiles Include="$(Dist)\$(AssemblyName)\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)$(Dist)\$(AssemblyName)\**\*" >
+      <Visible>false</Visible>
+      <Link>$(WebRoot)\%(RecursiveDir)%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Target Name="EnsureNodeEnv" BeforeTargets="Build" Condition="'$(NeedToBuild)' == 'true'">
+    <!-- Ensure Node.js is installed -->
+    <Message Importance="high" Text="Ensure Node.js is installed..." />
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+  </Target>
+  <Target Name="RestoreWebModules" AfterTargets="EnsureNodeEnv" Condition="'$(NeedToBuild)' == 'true'">
+    <Message Importance="high" Text="Restoring dependencies using 'yarn'. This may take several minutes..." />
+    <Exec WorkingDirectory="./" Command="$(PackageManager)" />
+    <Exec WorkingDirectory="./" Command="ng --version" />
+  </Target>
+  <Target Name="BuildClientAppDebug" AfterTargets="RestoreWebModules" Condition="'$(NeedToBuild)' == 'true' AND '$(Configuration)' == 'Debug'">
+    <Message Importance="high" Text="build application with debug flag..." />
+    <Exec WorkingDirectory="./" Command="ng build --configuration development" />
+  </Target>
+  <Target Name="BuildClientApp" AfterTargets="RestoreWebModules" Condition="'$(NeedToBuild)' == 'true' AND '$(Configuration)' == 'Release'">
+    <Message Importance="high" Text="build application" />
+    <Exec WorkingDirectory="./" Command="ng build" />
+  </Target>
+  <Target Name="VerifyHash" BeforeTargets="EnsureNodeEnv">
+    <GetFileHash Files="@(WatchedFiles)">
+      <Output TaskParameter="Items" ItemName="FilesWithHashes" />
+    </GetFileHash>
+    <WriteLinesToFile File="@(HashTmpFile)" Lines="@(FilesWithHashes->'%(Identity): %(FileHash)')" Overwrite="true" Encoding="Unicode" />
+    <GetFileHash Files="@(HashFile)" Condition="Exists(@(HashFile))">
+      <Output TaskParameter="Hash" ItemName="ComputedHash" />
+    </GetFileHash>
+    <VerifyFileHash File="@(HashTmpFile)" Hash="@(ComputedHash)" ContinueOnError="true" Condition="Exists(@(HashFile))" />
+    <PropertyGroup Condition="'$(MSBuildLastTaskResult)' == 'false' OR !Exists('$(Dist)') OR !Exists(@(HashFile))">
+      <NeedToBuild>true</NeedToBuild>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(MSBuildLastTaskResult)' == 'true' AND Exists('$(Dist)') AND Exists(@(HashFile))">
+      <NeedToBuild>false</NeedToBuild>
+    </PropertyGroup>
+    <Delete Files="@(HashTmpFile)" />
+    <WriteLinesToFile File="@(HashFile)" Lines="@(FilesWithHashes->'%(Identity): %(FileHash)')" Overwrite="true" Encoding="Unicode" />
+    <Message Importance="High" Text="No build required as all files are up to date" Condition="'$(NeedToBuild)' == 'false'" />
+    <Message Importance="High" Text="MS This is $(MSBuildThisFileFullPath)" />
+    <Message Importance="High" Text="BasePath is $(BaseOutputPath)" />
+  </Target>
+</Project>

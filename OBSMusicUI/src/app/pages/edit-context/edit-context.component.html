@@ -1,0 +1,16 @@
+<section>
+  <!-- Context Id -->
+  <h1>{{ musicContext?.ContextId }}</h1>
+  <mat-list>
+    <mat-list-item *ngFor="let track of musicContext?.Tracks">
+      <mat-icon mat-list-icon>audiotrack</mat-icon>
+      <div mat-line>{{ track.Name }}</div>
+    </mat-list-item>
+  </mat-list>
+  <mat-list>
+    <mat-list-item *ngFor="let playList of musicContext?.PlayLists">
+      <mat-icon mat-list-icon>queue_music</mat-icon>
+      <div mat-line>{{ playList.Name }}</div>
+    </mat-list-item>
+  </mat-list>
+</section>

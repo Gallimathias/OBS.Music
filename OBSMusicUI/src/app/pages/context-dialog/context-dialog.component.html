@@ -1,0 +1,20 @@
+<div class="editor-dialog">
+    <h2 mat-dialog-title>Post Text</h2>
+    <mat-dialog-content>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Context Id</mat-label>
+            <input matInput [formControl]="contextFormControl" placeholder="Ex. 3CEC751C-6EF1-48AE-AD50-727187212370">
+            <mat-error *ngIf="contextFormControl.hasError('pattern') && !contextFormControl.hasError('required')">
+                Please enter a existing music context id
+              </mat-error>
+              <mat-error *ngIf="contextFormControl.hasError('required')">
+                Context is <strong>required</strong>
+              </mat-error>
+          </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button [mat-dialog-close]="true" [disabled]="contextFormControl.hasError('pattern') || contextFormControl.hasError('required')" cdkFocusInitial>Ok</button>
+    </mat-dialog-actions>
+  </div>
+  

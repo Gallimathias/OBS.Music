@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <EnablePreviewFeatures>True</EnablePreviewFeatures>
+	  <Nullable>enable</Nullable>
+	  <WarningsAsErrors>Nullable</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OBS.Music\OBS.Music.csproj" />
+  </ItemGroup>
+
+<ItemGroup>
+		<PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="10.6.6" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="NLog" Version="4.7.13" />
+		<PackageReference Include="NonSucking.Framework.Extension" Version="1.0.0-alpha.46-74a9158" />
+		<PackageReference Include="System.Interactive" Version="5.1.0" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
+
+</Project>
