@@ -4,13 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OBS.Music.JSON
+namespace OBS.Music.JSON;
+
+public record MusicSourceInfo(string Name, string Source, string File, string Licence)
 {
-    public class MusicSourceInfo
-    {
-        public string Name { get; set; }
-        public string Source { get; set; }
-        public string File { get; set; }
-        public string Licence { get; set; }
-    }
 }

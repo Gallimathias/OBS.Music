@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28917.182
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBS.Music", "OBS.Music\OBS.Music.csproj", "{1B4097F4-542F-4199-AFC2-4B44E19DBC19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OBS.Music", "OBS.Music\OBS.Music.csproj", "{1B4097F4-542F-4199-AFC2-4B44E19DBC19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBS.Music.GUI", "OBS.Music.GUI\OBS.Music.GUI.csproj", "{961CD629-E447-45B8-959C-911DDD2D7C36}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "OBSMusicUI", "OBSMusicUI\OBSMusicUI.msbuildproj", "{01464E6A-EE10-485F-8D8A-A2AFFCF18C45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBS.Music.Test", "OBS.Music.Test\OBS.Music.Test.csproj", "{31995F4B-B646-4D55-9009-78574FD2CE74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OldUI", "OldUI\OldUI.csproj", "{0ADDA89E-69FA-45F0-9CFE-027B1BF10D46}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OBS.Music.Web", "OBS.Music.Web\OBS.Music.Web.csproj", "{0B361ED7-59A8-48D8-96AE-42AA78163899}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generator", "Generator\Generator.csproj", "{A93CC0B8-3E73-49A1-AA0D-7E2B9B444222}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +23,22 @@ Global
 		{1B4097F4-542F-4199-AFC2-4B44E19DBC19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B4097F4-542F-4199-AFC2-4B44E19DBC19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B4097F4-542F-4199-AFC2-4B44E19DBC19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{961CD629-E447-45B8-959C-911DDD2D7C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{961CD629-E447-45B8-959C-911DDD2D7C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{961CD629-E447-45B8-959C-911DDD2D7C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{961CD629-E447-45B8-959C-911DDD2D7C36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{31995F4B-B646-4D55-9009-78574FD2CE74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{31995F4B-B646-4D55-9009-78574FD2CE74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{31995F4B-B646-4D55-9009-78574FD2CE74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{31995F4B-B646-4D55-9009-78574FD2CE74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01464E6A-EE10-485F-8D8A-A2AFFCF18C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01464E6A-EE10-485F-8D8A-A2AFFCF18C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01464E6A-EE10-485F-8D8A-A2AFFCF18C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01464E6A-EE10-485F-8D8A-A2AFFCF18C45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ADDA89E-69FA-45F0-9CFE-027B1BF10D46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADDA89E-69FA-45F0-9CFE-027B1BF10D46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADDA89E-69FA-45F0-9CFE-027B1BF10D46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADDA89E-69FA-45F0-9CFE-027B1BF10D46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B361ED7-59A8-48D8-96AE-42AA78163899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B361ED7-59A8-48D8-96AE-42AA78163899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B361ED7-59A8-48D8-96AE-42AA78163899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B361ED7-59A8-48D8-96AE-42AA78163899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93CC0B8-3E73-49A1-AA0D-7E2B9B444222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93CC0B8-3E73-49A1-AA0D-7E2B9B444222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93CC0B8-3E73-49A1-AA0D-7E2B9B444222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93CC0B8-3E73-49A1-AA0D-7E2B9B444222}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,40 +7,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OBS.Music
+namespace OBS.Music;
+
+public class Collector
 {
-    public class Collector
+    public DirectoryInfo DirectoryInfo { get; private set; }
+    public List<MusicSourceInfo> MusicInfo { get; private set; }
+
+
+    public Collector(string folderPath)
     {
-        public DirectoryInfo DirectoryInfo { get; private set; }
-        public List<MusicSourceInfo> MusicInfo { get; private set; }
-
-
-        public Collector(string folderPath)
-        {
-            DirectoryInfo = new DirectoryInfo(folderPath);
-            MusicInfo = new List<MusicSourceInfo>();
-        }
-
-        public void Collect()
-        {
-            if (!DirectoryInfo.Exists)
-                return;
-
-            FileInfo[] msifFiles = DirectoryInfo.GetFiles("*.msif");
-
-            foreach (FileInfo file in msifFiles)
-                MusicInfo.AddRange(JsonConvert.DeserializeObject<MusicSourceInfo[]>(File.ReadAllText(file.FullName)));
-
-        }
-
-        public PlayList GetPlayList()
-        {
-            var playList = new PlayList();
-
-            for (var i = 0; i < MusicInfo.Count; i++)
-                playList.Add(i, MusicInfo[i]);
-
-            return playList;
-        }
+        DirectoryInfo = new DirectoryInfo(folderPath);
+        MusicInfo = new List<MusicSourceInfo>();
     }
+
+    public void Collect()
+    {
+        if (!DirectoryInfo.Exists)
+            return;
+
+        FileInfo[] msifFiles = DirectoryInfo.GetFiles("*.msif");
+
+        foreach (FileInfo file in msifFiles)
+            MusicInfo.AddRange(JsonConvert.DeserializeObject<MusicSourceInfo[]>(File.ReadAllText(file.FullName)) ?? Enumerable.Empty<MusicSourceInfo>());
+
+    }
+
 }
